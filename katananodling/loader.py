@@ -1,5 +1,6 @@
 import importlib
 import inspect
+import json
 import logging
 from types import ModuleType
 from typing import Dict
@@ -46,6 +47,10 @@ def registerTools(tools_packages_list):
             "REGISTERED global is not empty: this means this function has already been"
             "called. You can only call it once."
         )
+    logger.debug("[registerTools] Started...")
+    logger.debug(
+        "[registerTools] c.Env={}".format(json.dumps(c.Env.__asdict__(), indent=4))
+    )
 
     NodegraphAPI.RegisterPythonGroupType(c.KATANA_TYPE_NAME, entities.BaseCustomNode)
     NodegraphAPI.AddNodeFlavor(c.KATANA_TYPE_NAME, "_hide")  # TODO: see if kept
