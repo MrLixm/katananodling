@@ -243,7 +243,7 @@ def _registerNodePackage(package):
 def _getAvailableNodesInPackage(package):
     # type: (ModuleType) -> Dict[str, Type[entities.BaseCustomNode]]
     """
-    _getAllToolsInPackage() but filtered to remove the tools that have been asked to be
+    _getAllNodesInPackage() but filtered to remove the tools that have been asked to be
     ignored using an environment variable.
 
     Returns:
@@ -251,7 +251,7 @@ def _getAvailableNodesInPackage(package):
     """
     import os  # defer import to get the latest version of os.environ
 
-    all_tools = _getAllToolsInPackage(package)
+    all_tools = _getAllNodesInPackage(package)
 
     excluded_tool_var = c.Env.get(c.Env.EXCLUDED_TOOLS)
     if not excluded_tool_var:
@@ -270,7 +270,7 @@ def _getAvailableNodesInPackage(package):
     return all_tools
 
 
-def _getAllToolsInPackage(package):
+def _getAllNodesInPackage(package):
     # type: (ModuleType) -> Dict[str, Type[entities.BaseCustomNode]]
     """
     Get a list of all the "tools" modules available in the given package.
@@ -307,7 +307,7 @@ def _getAllToolsInPackage(package):
 
         out[objectName] = objectData
         logger.debug(
-            "[_getAllToolsInPackage] Found [{}]={}".format(objectName, objectData)
+            "[_getAllNodesInPackage] Found [{}]={}".format(objectName, objectData)
         )
 
     return out
