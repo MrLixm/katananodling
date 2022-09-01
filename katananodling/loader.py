@@ -124,6 +124,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
         return
 
     try:
+        node.__upgradeapi__()
         node.upgrade()
     except Exception as excp:
         logger.exception(

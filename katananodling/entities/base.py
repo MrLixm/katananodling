@@ -162,7 +162,9 @@ class AboutGroupParam:
 
         This is called by the parent :class:`BaseCustomNode`
         """
-        pass
+        p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.api_version))
+        p.setValue(c.__version__, 0)
+        return
 
     def _getValue(self, info_name):
         # type: (str) -> Optional[Any]
