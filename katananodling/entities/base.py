@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 class AboutGroupParam:
     """
-    A group parameter that provide contextual information on a CustomTool and allow
+    A group parameter that provide contextual information on a BaseCustomNode and allow
     to have them stored and persistent on the node.
 
     Their value is initialized on node creation and should only be updated when the
@@ -214,7 +214,7 @@ class AboutGroupParam:
 
 class BaseCustomNode(NodegraphAPI.PythonGroupNode):
     """
-    Abstract base class to create "CustomTool" nodes.
+    Abstract base class to create "BaseCustomNode" nodes.
 
     That's just a group node with some standards like an "about" param.
 
@@ -246,7 +246,7 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
 
     def __build__(self):
         """
-        Called when the CustomTool subclass is created in the nodegraph.
+        Called when the BaseCustomNode subclass is created in the nodegraph.
         """
         try:
             self.about.__build__()

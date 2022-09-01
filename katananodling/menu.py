@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def getLayeredMenuForAllCustomTool():
     # type: () -> LayeredMenuAPI.LayeredMenu
     """
-    Get a LayeredMenu instance to display that list all the CustomTool registered in
+    Get a LayeredMenu instance to display that list all the BaseCustomNode registered in
     Katana.
     """
 

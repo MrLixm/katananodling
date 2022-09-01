@@ -25,14 +25,14 @@ logger = logging.getLogger(__name__)
 
 REGISTERED = {}  # type: Dict[str, Type[entities.BaseCustomNode]]
 """
-Dictionnary of CUstomTool class registered to be used in Katana.
+Dictionnary of BaseCustomNode class registered to be used in Katana.
 """
 
 
 def registerNodesFor(tools_packages_list):
     # type: (Sequence[str]) -> None
     """
-    Register the CustomTool declared in the given locations names.
+    Register the BaseCustomNode declared in the given locations names.
     Those locations must be python package names registered in the PYTHONPATH, so they
     can be converted to modules and imported.
 
@@ -82,13 +82,13 @@ def registerNodesFor(tools_packages_list):
 
 def registerCallbacks():
     """
-    Register callback for CustomTool nodes events.
+    Register callback for BaseCustomNode nodes events.
     """
 
     if not c.Env.get(c.Env.UPGRADE_DISABLE):
         Utils.EventModule.RegisterEventHandler(upgradeOnNodeCreateEvent, "node_create")
         logger.debug(
-            '[_registerCallbackCustomTools] registered event handler "node_create" with'
+            '[registerCallbacks] registered event handler "node_create" with'
             "<upgradeOnNodeCreateEvent>"
         )
     return
@@ -110,8 +110,8 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
         *args: (event name, event id)
         **kwargs: {node, nodeType, nodeName}
     """
-    # remember CustomTool loading is performed in 2 parts:
-    #   first a simple CustomTool instanc eis created and then its being assigned
+    # remember BaseCustomNode loading is performed in 2 parts:
+    #   first a simple BaseCustomNode instanc eis created and then its being assigned
     #   its subclass which will give a different nodeType.
     if kwargs.get("nodeType") == "CustomTool":
         return
@@ -125,7 +125,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
         node.upgrade()
     except Exception as excp:
         logger.exception(
-            "[upgradeOnNodeCreateEvent] Cannot upgrade CustomTool node {}: {}"
+            "[upgradeOnNodeCreateEvent] Cannot upgrade BaseCustomNode node {}: {}"
             "".format(node, excp),
             exc_info=excp,
         )
@@ -164,7 +164,7 @@ def _createCustomNode(class_name):
             )  # type: nodebase.BaseCustomNode
         except Exception:
             logger.exception(
-                '[_createCustomNode] Error creating CustomTool of type "{}"'.format(
+                '[_createCustomNode] Error creating BaseCustomNode of type "{}"'.format(
                     class_name
                 )
             )
@@ -180,7 +180,7 @@ def _createCustomNode(class_name):
 
         except Exception:
             logger.exception(
-                '[_createCustomNode] Error creating CustomTool of type "{}"'
+                '[_createCustomNode] Error creating BaseCustomNode of type "{}"'
                 "".format(class_name)
             )
             node.delete()

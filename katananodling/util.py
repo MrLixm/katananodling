@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def asserting(expression, msg):
     # type: (bool, str) -> None
     """
-    It is not recommended to use ``assert`` in CustomTool as the error will not be
+    It is not recommended to use ``assert`` in BaseCustomNode as the error will not be
     raised in the log. Instead we can use this shortand function that will actually log.
 
     Args:
