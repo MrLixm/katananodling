@@ -11,7 +11,7 @@ from Katana import Callbacks
 from Katana import Utils
 
 from . import c
-from . import nodebase
+from . import entities
 
 __all__ = (
     "REGISTERED",
@@ -22,7 +22,7 @@ __all__ = (
 logger = logging.getLogger(__name__)
 
 
-REGISTERED = {}  # type: Dict[str, Type[nodebase.CustomToolNode]]
+REGISTERED = {}  # type: Dict[str, Type[entities.CustomToolNode]]
 """
 Dictionnary of CUstomTool class registered to be used in Katana.
 """
@@ -47,7 +47,7 @@ def registerTools(tools_packages_list):
             "called. You can only call it once."
         )
 
-    NodegraphAPI.RegisterPythonGroupType(c.KATANA_TYPE_NAME, nodebase.CustomToolNode)
+    NodegraphAPI.RegisterPythonGroupType(c.KATANA_TYPE_NAME, entities.CustomToolNode)
     NodegraphAPI.AddNodeFlavor(c.KATANA_TYPE_NAME, "_hide")  # TODO: see if kept
     logger.debug(
         "[registerTools] RegisterPythonGroupType for <{}>".format(c.KATANA_TYPE_NAME)
@@ -120,7 +120,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
         return
 
     node = kwargs.get("node")
-    if not isinstance(node, nodebase.CustomToolNode):
+    if not isinstance(node, entities.CustomToolNode):
         return
 
     try:
@@ -226,7 +226,7 @@ def _registerToolPackage(package):
 
 
 def _getAvailableToolsInPackage(package):
-    # type: (ModuleType) -> Dict[str, Type[nodebase.CustomToolNode]]
+    # type: (ModuleType) -> Dict[str, Type[entities.CustomToolNode]]
     """
     _getAllToolsInPackage() but filtered to remove the tools that have been asked to be
     ignored using an environment variable.
@@ -256,7 +256,7 @@ def _getAvailableToolsInPackage(package):
 
 
 def _getAllToolsInPackage(package):
-    # type: (ModuleType) -> Dict[str, Type[nodebase.CustomToolNode]]
+    # type: (ModuleType) -> Dict[str, Type[entities.CustomToolNode]]
     """
     Get a list of all the "tools" modules available in the given package.
 
@@ -278,7 +278,7 @@ def _getAllToolsInPackage(package):
         if not inspect.isclass(objectData):
             continue
 
-        if not issubclass(objectData, nodebase.CustomToolNode):
+        if not issubclass(objectData, entities.CustomToolNode):
             continue
 
         try:
