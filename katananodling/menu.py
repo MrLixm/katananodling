@@ -7,12 +7,12 @@ from . import c
 from .loader import REGISTERED
 
 
-__all__ = ("getLayeredMenuForAllCustomTool",)
+__all__ = ("getLayeredMenuForAllCustomNodes",)
 
 logger = logging.getLogger(__name__)
 
 
-def getLayeredMenuForAllCustomTool():
+def getLayeredMenuForAllCustomNodes():
     # type: () -> LayeredMenuAPI.LayeredMenu
     """
     Get a LayeredMenu instance to display that list all the BaseCustomNode registered in
