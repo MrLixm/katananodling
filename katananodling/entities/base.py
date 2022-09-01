@@ -21,30 +21,6 @@ __all__ = ("BaseCustomNode",)
 logger = logging.getLogger(__name__)
 
 
-def customToolNodeCallback(**kwargs):
-    """
-    This code is executed for ANY node created in the Nodegraph.
-    We use it to modify the BaseCustomNode apperance after its creation.
-
-    THIS CALLBACK IS NOT CALLED BY DEFAULT, you need to enable it in loader.py
-
-    kwargs example ::
-
-        {'node': <Xform2P Xform2P 'Xform2P_0002'>,
-         'nodeName': 'Xform2P',
-         'nodeType': 'Xform2P',
-         'objectHash': -38886720}
-
-    Args:
-        **kwargs: see kwars example above
-    """
-    node = kwargs.get("node")
-    if not isinstance(node, BaseCustomNode):
-        return
-
-    return
-
-
 class AboutGroupParam:
     """
     A group parameter that provide contextual information on a CustomTool and allow

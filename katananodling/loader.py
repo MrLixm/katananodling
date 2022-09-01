@@ -84,14 +84,6 @@ def registerCallbacks():
     """
     Register callback for CustomTool nodes events.
     """
-    # Callbacks.addCallback(
-    #     Callbacks.Type.onNodeCreate,
-    #     nodebase.customToolNodeCallback,
-    # )
-    # logger.debug(
-    #     "[_registerCallbackCustomTools] added callback onNodeCreate with"
-    #     "<nodebase.customToolNodeCallback>"
-    # )
 
     if not c.Env.get(c.Env.UPGRADE_DISABLE):
         Utils.EventModule.RegisterEventHandler(upgradeOnNodeCreateEvent, "node_create")
