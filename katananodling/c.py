@@ -40,7 +40,7 @@ class Env:
     Environment variable used by package.
     """
 
-    _PREFIX = "KATANA_CUSTOMTOOLING"
+    _PREFIX = "KATANA_NODLING"
 
     EXCLUDED_TOOLS = "{}_EXCLUDED_TOOLS".format(_PREFIX)
     """
