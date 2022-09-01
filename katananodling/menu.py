@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 from Katana import NodegraphAPI
 from Katana import LayeredMenuAPI
@@ -29,7 +30,7 @@ def getLayeredMenuForAllCustomNodes():
         checkAvailabilityCallback=None,
     )
 
-    logger.debug("[getLayeredMenu] Finished.")
+    logger.debug("[getLayeredMenuForAllCustomNodes] Finished.")
     return layeredMenu
 
 
@@ -77,7 +78,7 @@ def _populateCallback(layered_menu):
 
 
 def _actionCallback(key):
-    # type: (str) -> NodegraphAPI.Node
+    # type: (str) -> Optional[NodegraphAPI.Node]
     """
     Called when an entry is clicked by the user.
 
@@ -100,7 +101,7 @@ def _actionCallback(key):
             node = NodegraphAPI.CreateNode(tool_name, NodegraphAPI.GetRootNode())
         except Exception as excp:
             logger.error(
-                "[__actionCallback] Error when trying to create node <{}>: {}"
+                "[_actionCallback] Error when trying to create node <{}>: {}"
                 "".format(tool_name, excp),
             )
             raise

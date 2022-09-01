@@ -292,7 +292,7 @@ def _getAllNodesInPackage(package):
             objectData._check()
         except AssertionError as excp:
             logger.exception(
-                "[getAllToolsInPackage] InvalidNodeClass: class <{}> for package {}:\n"
+                "[_getAllNodesInPackage] InvalidNodeClass: class <{}> for package {}:\n"
                 "   {}".format(objectData, package, excp)
             )
             continue

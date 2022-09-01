@@ -44,7 +44,7 @@ class Env:
 
     EXCLUDED_TOOLS = "{}_EXCLUDED_TOOLS".format(_PREFIX)
     """
-    Environment variable name that must specify a list of tools name to NOT show in
+    Environment variable name that must specify a list of CustomNode name to NOT show in
     the LayeredMenu. Separator is the system path separator (; or :):
 
     ex: ``"attr_math;xform2P;point_width"``

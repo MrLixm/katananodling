@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 class OpScriptCustomNode(BaseCustomNode):
     """
-    Abstract class to create a tool based on at least one OpScript node.
+    Abstract class to create a custom node based on at least one OpScript node.
     The OpScript configuration (OpArg) is accessible to the user via parameters
-    declared in the ``__build()`` method that must be overriden.
+    declared in the ``_build()`` method that must be overriden.
     """
 
     luamodule = NotImplemented
