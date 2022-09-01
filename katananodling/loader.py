@@ -69,7 +69,7 @@ def registerNodesFor(tools_packages_list):
             )
             continue
 
-        registered = _registerToolPackage(package=package)
+        registered = _registerNodePackage(package=package)
         # registered tools can be found in REGISTERED global anyway
         continue
 
@@ -200,7 +200,7 @@ def _createCustomNode(class_name):
     return node
 
 
-def _registerToolPackage(package):
+def _registerNodePackage(package):
     # type: (ModuleType) ->  Dict[str, Type[nodebase.BaseCustomNode]]
     """
 
@@ -217,7 +217,7 @@ def _registerToolPackage(package):
 
         if tool_class.name in REGISTERED:
             logger.warning(
-                "[_registerToolPackage] tool from module <{}> from package {} is "
+                "[_registerNodePackage] tool from module <{}> from package {} is "
                 "already registered as <{}>."
                 "".format(tool_module_name, package, tool_class.name)
             )
@@ -228,13 +228,13 @@ def _registerToolPackage(package):
         REGISTERED[tool_class.name] = tool_class
 
         logger.debug(
-            "[_registerToolPackage] registered ({}){}"
+            "[_registerNodePackage] registered ({}){}"
             "".format(tool_module_name, tool_class)
         )
         continue
 
     logger.debug(
-        "[_registerToolPackage] Finished registering package {}, {} tools found."
+        "[_registerNodePackage] Finished registering package {}, {} tools found."
         "".format(package, len(customtool_dict))
     )
     return customtool_dict
