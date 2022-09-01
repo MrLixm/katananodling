@@ -1,2 +1,2 @@
 from .base import BaseCustomNode
-from .opscript import OpScriptTool
+from .opscript import OpScriptCustomNode

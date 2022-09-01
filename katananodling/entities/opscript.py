@@ -6,12 +6,12 @@ from Katana import NodegraphAPI
 
 from .base import BaseCustomNode
 
-__all__ = ("OpScriptTool",)
+__all__ = ("OpScriptCustomNode",)
 
 logger = logging.getLogger(__name__)
 
 
-class OpScriptTool(BaseCustomNode):
+class OpScriptCustomNode(BaseCustomNode):
     """
     Abstract class to create a tool based on at least one OpScript node.
     The OpScript configuration (OpArg) is accessible to the user via parameters
@@ -27,7 +27,7 @@ class OpScriptTool(BaseCustomNode):
     """
 
     def _buildDefaultStructure(self):
-        super(OpScriptTool, self)._buildDefaultStructure()
+        super(OpScriptCustomNode, self)._buildDefaultStructure()
 
         self._node_opscript = NodegraphAPI.CreateNode("OpScript", self)
         self._node_opscript.setName("OpScript_{}_0001".format(self.name))
