@@ -17,7 +17,7 @@ from . import entities
 __all__ = (
     "REGISTERED",
     "registerCallbacks",
-    "registerTools",
+    "registerNodesFor",
 )
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ Dictionnary of CUstomTool class registered to be used in Katana.
 """
 
 
-def registerTools(tools_packages_list):
+def registerNodesFor(tools_packages_list):
     # type: (Sequence[str]) -> None
     """
     Register the CustomTool declared in the given locations names.
@@ -47,15 +47,15 @@ def registerTools(tools_packages_list):
             "REGISTERED global is not empty: this means this function has already been"
             "called. You can only call it once."
         )
-    logger.debug("[registerTools] Started...")
+    logger.debug("[registerNodesFor] Started...")
     logger.debug(
-        "[registerTools] c.Env={}".format(json.dumps(c.Env.__asdict__(), indent=4))
+        "[registerNodesFor] c.Env={}".format(json.dumps(c.Env.__asdict__(), indent=4))
     )
 
     NodegraphAPI.RegisterPythonGroupType(c.KATANA_TYPE_NAME, entities.BaseCustomNode)
     NodegraphAPI.AddNodeFlavor(c.KATANA_TYPE_NAME, "_hide")  # TODO: see if kept
     logger.debug(
-        "[registerTools] RegisterPythonGroupType for <{}>".format(c.KATANA_TYPE_NAME)
+        "[registerNodesFor] RegisterPythonGroupType for <{}>".format(c.KATANA_TYPE_NAME)
     )
 
     for package_id in tools_packages_list:
@@ -64,7 +64,7 @@ def registerTools(tools_packages_list):
             package = importlib.import_module(package_id)  # type: ModuleType
         except Exception as excp:
             logger.exception(
-                "[registerTools] Cannot import package <{}>: {}"
+                "[registerNodesFor] Cannot import package <{}>: {}"
                 "".format(package_id, excp)
             )
             continue
@@ -74,7 +74,7 @@ def registerTools(tools_packages_list):
         continue
 
     logger.info(
-        "[registerTools] Finished. Registered {} custom tools for {} locations."
+        "[registerNodesFor] Finished. Registered {} custom tools for {} locations."
         "".format(len(REGISTERED), len(tools_packages_list))
     )
     return
