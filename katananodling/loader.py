@@ -1,18 +1,10 @@
 import importlib
 import inspect
 import logging
-import pkgutil
-import sys
 from types import ModuleType
 from typing import Dict
 from typing import Sequence
-from typing import Optional
 from typing import Type
-
-if sys.version_info[0] == 2:
-    from pkgutil import ImpImporter as FileFinder
-else:
-    from importlib.machinery import FileFinder
 
 from Katana import NodegraphAPI
 from Katana import Callbacks
