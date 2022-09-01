@@ -47,6 +47,13 @@ class AboutGroupParam:
     """
     A group parameter that provide contextual information on a CustomTool and allow
     to have them stored and persistent on the node.
+
+    Their value is initialized on node creation and should only be updated when the
+    node version is upgraded using the ``upgrade()`` method. (where you should call
+    the ``__upgrade__()`` method.)
+
+    The parameter names on this should not be modified as there is no upgrade method
+    that take care of updating them if an older "version" of them is encountered.
     """
 
     class ParamNames:
@@ -107,16 +114,41 @@ class AboutGroupParam:
         )
         p.setHintString(repr({"readOnly": True, "widget": "null"}))
 
-        p = self.param.createChildString(
-            self.ParamNames.documentation, inspect.getfile(self.node.__class__)
-        )
+        script = c.OPEN_DOCUMENTATION_SCRIPT.format(PATH_PARAM=self.ParamNames.path)
+        p = self.param.createChildString(self.ParamNames.documentation, script)
         hints = {
             "widget": "scriptButton",
-            "scriptText": c.OPEN_DOCUMENTATION_SCRIPT.format(
-                PATH_PARAM=self.ParamNames.path
-            ),
+            "scriptText": script,
         }
         p.setHintString(repr(hints))
+        return
+
+    def __upgrade__(self):
+        """
+        Upgrade the values on the parameters with the latest ones defined on the node
+        python class.
+        """
+
+        p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.name))
+        p.setValue(self.node.name, 0)
+
+        p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.version))
+        p.setValue(str(Version(self.node.version)), 0)
+
+        p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.description))
+        p.setValue(self.node.description, 0)
+
+        p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.author))
+        p.setValue(self.node.author, 0)
+
+        p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.path))
+        p.setValue(inspect.getfile(self.node.__class__), 0)
+
+        script = c.OPEN_DOCUMENTATION_SCRIPT.format(PATH_PARAM=self.ParamNames.path)
+        p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.path))
+        p.setValue(script, 0)
+        p.setHintString(repr({"scriptText": script}))
+
         return
 
     def _getValue(self, info_name):
