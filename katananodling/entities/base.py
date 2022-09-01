@@ -1,3 +1,5 @@
+import ast
+import json
 import logging
 import re
 import traceback
@@ -127,6 +129,35 @@ class AboutGroupParam:
         p.setHintString(repr(hints))
         return
 
+    def __toggleDebugMode__(self, enable):
+        # type: (bool) -> None
+        """
+        Toggle visibility on hidden parameters for debug purposes.
+
+        You MUST NOT delete / edit paramaters in other way than purely visibility
+        ones.
+
+        Args:
+            enable: True to enable debug mode, False to make it back to normal
+        """
+
+        hidden_param_list = [
+            self.node.getParameter(self.ParamNames.getPath(self.ParamNames.path)),
+            self.node.getParameter(
+                self.ParamNames.getPath(self.ParamNames.api_version)
+            ),
+        ]
+        for param in hidden_param_list:
+
+            hints = ast.literal_eval(param.getHintString())
+            if enable:
+                del hints["widget"]
+            else:
+                hints["widget"] = "null"
+            param.setHintString(repr(hints))
+
+        return
+
     def __update__(self):
         """
         Update the values on the parameters with the latest ones defined on the node
@@ -252,6 +283,31 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
             )
         return
 
+    def __toggleDebugMode__(self, enable):
+        # type: (bool) -> None
+        """
+        Edit some parameters to help at debugging.
+
+        Args:
+            enable: True to enable debug mode, False to make it back to normal
+        """
+        self.about.__toggleDebugMode__(enable=enable)
+
+        pname = "debug__"
+        p = self.getParameter(pname)
+        if p:
+            self.getParameters().deleteChild(p)
+
+        if enable:
+            p = self.getParameters().createChildString(pname, "")
+            hint = {"widget": "scriptEditor", "readOnly": True}
+            p.setHintString(repr(hint))
+            v = vars(self)
+            v.update(vars(self.__class__))
+            p.setValue(json.dumps(v, indent=4, default=str, sort_keys=True), 0)
+
+        return
+
     def __upgradeapi__(self):
         """
         This is to update the node following internal API changes on the python package.
@@ -269,7 +325,7 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
 
         self.about.__upgradeapi__()
         logger.debug(
-            "[{}][__upgradeapi__] Finished for {}. {} -> {}"
+            "[{}][__upgradeapi__] Finished for <{}>. <{}> -> <{}>"
             "".format(
                 self.__class__.__name__, self.getName(), versionprev, c.__version__
             )

@@ -133,6 +133,15 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
             exc_info=excp,
         )
 
+    try:
+        node.__toggleDebugMode__(True if c.Env.get(c.Env.NODE_PARAM_DEBUG) else False)
+    except Exception as excp:
+        logger.exception(
+            "[upgradeOnNodeCreateEvent] Error while calling __toggleDebugMode__ "
+            "on node {}: {}".format(node, excp),
+            exc_info=excp,
+        )
+
     return
 
 

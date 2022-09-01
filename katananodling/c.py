@@ -53,7 +53,15 @@ class Env:
     UPGRADE_DISABLE = "{}_UPGRADE_DISABLE".format(_PREFIX)
     """
     Set to 1 (or actually to anythin non-empty) to disable the upgrading process
-    when CustomTool nodes are loaded from previous version.
+    when BaseCustomNode nodes are loaded from previous version.
+    
+    This can be useful when opening archived project or sending scene to the farm.
+    """
+
+    NODE_PARAM_DEBUG = "{}_NODE_PARAM_DEBUG".format(_PREFIX)
+    """
+    Set to 1 (or actually to anythin non-empty) to enable the "debug" mode for
+    BaseCustomNode parameters. Params that are usually hidden are made visible.
     """
 
     @classmethod
@@ -61,6 +69,7 @@ class Env:
         # type: () -> List[str]
         return [
             cls.EXCLUDED_TOOLS,
+            cls.NODE_PARAM_DEBUG,
             cls.UPGRADE_DISABLE,
         ]
 
