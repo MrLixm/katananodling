@@ -4,6 +4,7 @@ import json
 import logging
 from types import ModuleType
 from typing import Dict
+from typing import Optional
 from typing import Sequence
 from typing import Type
 
@@ -143,7 +144,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
 
 
 def _createCustomNode(class_name):
-    # type: (str) -> NodegraphAPI.Node
+    # type: (str) -> Optional[NodegraphAPI.Node]
     """
 
     Args:
@@ -161,7 +162,7 @@ def _createCustomNode(class_name):
         try:
             node = NodegraphAPI.CreateNode(
                 c.KATANA_TYPE_NAME
-            )  # type: nodebase.BaseCustomNode
+            )  # type: entities.BaseCustomNode
         except Exception:
             logger.exception(
                 '[_createCustomNode] Error creating BaseCustomNode of type "{}"'.format(
@@ -193,7 +194,7 @@ def _createCustomNode(class_name):
 
 
 def _registerNodePackage(package):
-    # type: (ModuleType) ->  Dict[str, Type[nodebase.BaseCustomNode]]
+    # type: (ModuleType) ->  Dict[str, Type[entities.BaseCustomNode]]
     """
 
     Args:
