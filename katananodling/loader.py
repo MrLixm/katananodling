@@ -203,9 +203,9 @@ def _registerNodePackage(package):
         all the custom tools loaded as dict[tool_name, tool_class]
     """
 
-    customtool_dict = _getAvailableNodesInPackage(package=package)
+    customnodes_dict = _getAvailableNodesInPackage(package=package)
 
-    for tool_module_name, tool_class in customtool_dict.items():
+    for tool_module_name, tool_class in customnodes_dict.items():
 
         if tool_class.name in REGISTERED:
             logger.warning(
@@ -227,9 +227,9 @@ def _registerNodePackage(package):
 
     logger.debug(
         "[_registerNodePackage] Finished registering package {}, {} tools found."
-        "".format(package, len(customtool_dict))
+        "".format(package, len(customnodes_dict))
     )
-    return customtool_dict
+    return customnodes_dict
 
 
 def _getAvailableNodesInPackage(package):
