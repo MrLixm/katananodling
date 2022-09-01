@@ -55,7 +55,7 @@ class Version:
         elif (
             isinstance(versionable_object, (tuple, list))
             and len(versionable_object) == 3
-            # and len(list(filter(int, versionable_object))) == len(versionable_object)
+            and all(map(lambda vo: isinstance(vo, int), versionable_object))
         ):
             self.version = versionable_object
 
@@ -73,3 +73,26 @@ class Version:
     def __str__(self):
         version = map(str, self.version)
         return ".".join(version)
+
+    def __eq__(self, other):
+        if not isinstance(other, Version):
+            return False
+        return self.version == other.version
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    @property
+    def major(self):
+        # type: () -> int
+        return self.version[0]
+
+    @property
+    def minor(self):
+        # type: () -> int
+        return self.version[1]
+
+    @property
+    def patch(self):
+        # type: () -> int
+        return self.version[2]
