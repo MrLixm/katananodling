@@ -50,7 +50,7 @@ class AboutGroupParam:
 
     Their value is initialized on node creation and should only be updated when the
     node version is upgraded using the ``upgrade()`` method. (where you should call
-    the ``__upgrade__()`` method.)
+    the ``__update__()`` method.)
 
     The parameter names on this should not be modified as there is no upgrade method
     that take care of updating them if an older "version" of them is encountered.
@@ -64,6 +64,7 @@ class AboutGroupParam:
         author = "author_"
         path = "path_"
         documentation = "open_documentation"
+        api_version = "api_version"
 
         @classmethod
         def getPath(cls, param_name):
@@ -101,6 +102,9 @@ class AboutGroupParam:
         )
         p.setHintString(repr({"readOnly": True}))
 
+        p = self.param.createChildString(self.ParamNames.api_version, c.__version__)
+        p.setHintString(repr({"readOnly": True, "widget": "null"}))
+
         p = self.param.createChildString(
             self.ParamNames.description, self.node.description
         )
@@ -123,12 +127,11 @@ class AboutGroupParam:
         p.setHintString(repr(hints))
         return
 
-    def __upgrade__(self):
+    def __update__(self):
         """
-        Upgrade the values on the parameters with the latest ones defined on the node
+        Update the values on the parameters with the latest ones defined on the node
         python class.
         """
-
         p = self.node.getParameter(self.ParamNames.getPath(self.ParamNames.name))
         p.setValue(self.node.name, 0)
 
@@ -151,6 +154,16 @@ class AboutGroupParam:
 
         return
 
+    def __upgradeapi__(self):
+        """
+        This is to update the param following internal API changes on the python package.
+
+        Like for example you changed some parameter names in ``self.ParamNames``, ...
+
+        This is called by the parent :class:`BaseCustomNode`
+        """
+        pass
+
     def _getValue(self, info_name):
         # type: (str) -> Optional[Any]
         p = self.node.getParameter(self.ParamNames.getPath(info_name))
@@ -167,6 +180,14 @@ class AboutGroupParam:
     def version(self):
         # type: () -> Optional[Version]
         v = self._getValue(self.ParamNames.version)
+        if not v:
+            return
+        return Version(v)
+
+    @property
+    def api_version(self):
+        # type: () -> Optional[Version]
+        v = self._getValue(self.ParamNames.api_version)
         if not v:
             return
         return Version(v)
@@ -206,7 +227,6 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
     color = None  # type: Optional[Tuple[float,float,float]]
     description = ""  # type: str
     author = ""  # type: str
-    maintainers = []  # type: List[str]
 
     def __init__(self):
 
@@ -228,6 +248,30 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
                 "[{}][__build__] {}".format(self.__class__.__name__, excp),
                 exc_info=excp,
             )
+        return
+
+    def __upgradeapi__(self):
+        """
+        This is to update the node following internal API changes on the python package.
+
+        Do not confuse it with ``upgrade()`` method made for developers subclasses that
+        is call when a node **in the library** must be upgraded.
+        """
+        if c.Env.get(c.Env.UPGRADE_DISABLE):
+            return
+
+        if self.about.api_version == Version(c.__version__):
+            return
+
+        versionprev = str(self.about.api_version or "")
+
+        self.about.__upgradeapi__()
+        logger.debug(
+            "[{}][__upgradeapi__] Finished for {}. {} -> {}"
+            "".format(
+                self.__class__.__name__, self.getName(), versionprev, c.__version__
+            )
+        )
         return
 
     def _buildDefaultStructure(self):
