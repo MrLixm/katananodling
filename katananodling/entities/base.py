@@ -58,11 +58,11 @@ class AboutGroupParam:
 
     class ParamNames:
         group = "About"
-        name = "name_"
-        version = "version_"
-        description = "info_"
-        author = "author_"
-        path = "path_"
+        name = "name"
+        version = "version"
+        description = "info"
+        author = "author"
+        path = "path"
         documentation = "open_documentation"
         api_version = "api_version"
 
