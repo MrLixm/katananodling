@@ -43,7 +43,7 @@ def customToolNodeCallback(**kwargs):
     return
 
 
-class AboutParamGroup:
+class AboutGroupParam:
     """
     A group parameter that provide contextual information on a CustomTool and allow
     to have them stored and persistent on the node.
@@ -178,7 +178,7 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
 
     def __init__(self):
 
-        self.about = AboutParamGroup(self)  # type: AboutParamGroup
+        self.about = AboutGroupParam(self)  # type: AboutGroupParam
         self._node_dot_up = None  # type: NodegraphAPI.Node
         self._node_dot_down = None  # type: NodegraphAPI.Node
         return
