@@ -14,7 +14,7 @@ from katananodling import c
 from katananodling import util
 from katananodling.util import Version
 
-__all__ = ("CustomToolNode",)
+__all__ = ("BaseCustomNode",)
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 def customToolNodeCallback(**kwargs):
     """
     This code is executed for ANY node created in the Nodegraph.
-    We use it to modify the CustomToolNode apperance after its creation.
+    We use it to modify the BaseCustomNode apperance after its creation.
 
     THIS CALLBACK IS NOT CALLED BY DEFAULT, you need to enable it in loader.py
 
@@ -37,7 +37,7 @@ def customToolNodeCallback(**kwargs):
         **kwargs: see kwars example above
     """
     node = kwargs.get("node")
-    if not isinstance(node, CustomToolNode):
+    if not isinstance(node, BaseCustomNode):
         return
 
     return
@@ -66,9 +66,9 @@ class AboutParamGroup:
             return "{}.{}".format(cls.getPath(cls.group), param_name)
 
     def __init__(self, node):
-        # type: (CustomToolNode) -> None
+        # type: (BaseCustomNode) -> None
 
-        self.node = node  # type: CustomToolNode
+        self.node = node  # type: BaseCustomNode
         self.param = None  # type: Optional[NodegraphAPI.Parameter]
         self.param = node.getParameter(self.ParamNames.getPath(self.ParamNames.group))
 
@@ -150,7 +150,7 @@ class AboutParamGroup:
         return self._getValue(self.ParamNames.author)
 
 
-class CustomToolNode(NodegraphAPI.PythonGroupNode):
+class BaseCustomNode(NodegraphAPI.PythonGroupNode):
     """
     Abstract base class to create "CustomTool" nodes.
 

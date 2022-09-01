@@ -4,14 +4,14 @@ from typing import Optional
 
 from Katana import NodegraphAPI
 
-from .base import CustomToolNode
+from .base import BaseCustomNode
 
 __all__ = ("OpScriptTool",)
 
 logger = logging.getLogger(__name__)
 
 
-class OpScriptTool(CustomToolNode):
+class OpScriptTool(BaseCustomNode):
     """
     Abstract class to create a tool based on at least one OpScript node.
     The OpScript configuration (OpArg) is accessible to the user via parameters

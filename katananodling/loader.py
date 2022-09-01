@@ -22,7 +22,7 @@ __all__ = (
 logger = logging.getLogger(__name__)
 
 
-REGISTERED = {}  # type: Dict[str, Type[entities.CustomToolNode]]
+REGISTERED = {}  # type: Dict[str, Type[entities.BaseCustomNode]]
 """
 Dictionnary of CUstomTool class registered to be used in Katana.
 """
@@ -47,7 +47,7 @@ def registerTools(tools_packages_list):
             "called. You can only call it once."
         )
 
-    NodegraphAPI.RegisterPythonGroupType(c.KATANA_TYPE_NAME, entities.CustomToolNode)
+    NodegraphAPI.RegisterPythonGroupType(c.KATANA_TYPE_NAME, entities.BaseCustomNode)
     NodegraphAPI.AddNodeFlavor(c.KATANA_TYPE_NAME, "_hide")  # TODO: see if kept
     logger.debug(
         "[registerTools] RegisterPythonGroupType for <{}>".format(c.KATANA_TYPE_NAME)
@@ -101,7 +101,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
     """
     Called during the ``node_create`` event.
 
-    Perform an upgrade on all the CustomToolNode instances.
+    Perform an upgrade on all the BaseCustomNode instances.
 
     Exemple of parameters::
 
@@ -120,7 +120,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
         return
 
     node = kwargs.get("node")
-    if not isinstance(node, entities.CustomToolNode):
+    if not isinstance(node, entities.BaseCustomNode):
         return
 
     try:
@@ -154,7 +154,7 @@ def _createCustomTool(class_name):
         try:
             node = NodegraphAPI.CreateNode(
                 c.KATANA_TYPE_NAME
-            )  # type: nodebase.CustomToolNode
+            )  # type: nodebase.BaseCustomNode
         except Exception:
             logger.exception(
                 '[_createCustomTool] Error creating CustomTool of type "{}"'.format(
@@ -186,7 +186,7 @@ def _createCustomTool(class_name):
 
 
 def _registerToolPackage(package):
-    # type: (ModuleType) ->  Dict[str, Type[nodebase.CustomToolNode]]
+    # type: (ModuleType) ->  Dict[str, Type[nodebase.BaseCustomNode]]
     """
 
     Args:
@@ -226,13 +226,13 @@ def _registerToolPackage(package):
 
 
 def _getAvailableToolsInPackage(package):
-    # type: (ModuleType) -> Dict[str, Type[entities.CustomToolNode]]
+    # type: (ModuleType) -> Dict[str, Type[entities.BaseCustomNode]]
     """
     _getAllToolsInPackage() but filtered to remove the tools that have been asked to be
     ignored using an environment variable.
 
     Returns:
-        dict of module_name, CustomToolNode class defined in the module
+        dict of module_name, BaseCustomNode class defined in the module
     """
     import os  # defer import to get the latest version of os.environ
 
@@ -256,7 +256,7 @@ def _getAvailableToolsInPackage(package):
 
 
 def _getAllToolsInPackage(package):
-    # type: (ModuleType) -> Dict[str, Type[entities.CustomToolNode]]
+    # type: (ModuleType) -> Dict[str, Type[entities.BaseCustomNode]]
     """
     Get a list of all the "tools" modules available in the given package.
 
@@ -265,7 +265,7 @@ def _getAllToolsInPackage(package):
     SRC: https://stackoverflow.com/a/1310912/13806195
 
     Returns:
-        dict of module_name, CustomToolNode class defined in the module
+        dict of module_name, BaseCustomNode class defined in the module
     """
 
     out = dict()
@@ -278,7 +278,7 @@ def _getAllToolsInPackage(package):
         if not inspect.isclass(objectData):
             continue
 
-        if not issubclass(objectData, entities.CustomToolNode):
+        if not issubclass(objectData, entities.BaseCustomNode):
             continue
 
         try:
