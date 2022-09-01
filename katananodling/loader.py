@@ -113,7 +113,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
     # remember BaseCustomNode loading is performed in 2 parts:
     #   first a simple BaseCustomNode instanc eis created and then its being assigned
     #   its subclass which will give a different nodeType.
-    if kwargs.get("nodeType") == "CustomTool":
+    if kwargs.get("nodeType") == c.KATANA_TYPE_NAME:
         return
 
     node = kwargs.get("node")

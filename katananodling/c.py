@@ -89,13 +89,13 @@ class Env:
         return os.environ.get(key, default)
 
 
-KATANA_FLAVOR_NAME = "customTool"
+KATANA_FLAVOR_NAME = "customNode"
 """
 As each BaseCustomNode is registered as a separate node type, to quickly find all the custom
 tool, they are assigned a flavor using ``NodegraphAPI.AddNodeFlavor()``
 """
 
-KATANA_TYPE_NAME = "CustomTool"
+KATANA_TYPE_NAME = "CustomNode"
 """
 Name used to register the base class for all BaseCustomNodes using 
 ``NodegraphAPI.RegisterPythonGroupType``.
