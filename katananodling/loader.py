@@ -211,7 +211,7 @@ def _registerNodePackage(package):
         all the custom tools loaded as dict[tool_name, tool_class]
     """
 
-    customtool_dict = _getAvailableToolsInPackage(package=package)
+    customtool_dict = _getAvailableNodesInPackage(package=package)
 
     for tool_module_name, tool_class in customtool_dict.items():
 
@@ -240,7 +240,7 @@ def _registerNodePackage(package):
     return customtool_dict
 
 
-def _getAvailableToolsInPackage(package):
+def _getAvailableNodesInPackage(package):
     # type: (ModuleType) -> Dict[str, Type[entities.BaseCustomNode]]
     """
     _getAllToolsInPackage() but filtered to remove the tools that have been asked to be
@@ -265,7 +265,7 @@ def _getAvailableToolsInPackage(package):
             nexcluded += 1
 
     logger.debug(
-        "[_getAvailableToolsInPackage] Finished. Excluded {} tools.".format(nexcluded)
+        "[_getAvailableNodesInPackage] Finished. Excluded {} tools.".format(nexcluded)
     )
     return all_tools
 
