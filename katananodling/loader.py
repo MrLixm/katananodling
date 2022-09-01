@@ -150,7 +150,7 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
     return
 
 
-def _createCustomTool(class_name):
+def _createCustomNode(class_name):
     # type: (str) -> NodegraphAPI.Node
     """
 
@@ -172,7 +172,7 @@ def _createCustomTool(class_name):
             )  # type: nodebase.BaseCustomNode
         except Exception:
             logger.exception(
-                '[_createCustomTool] Error creating CustomTool of type "{}"'.format(
+                '[_createCustomNode] Error creating CustomTool of type "{}"'.format(
                     class_name
                 )
             )
@@ -188,7 +188,7 @@ def _createCustomTool(class_name):
 
         except Exception:
             logger.exception(
-                '[_createCustomTool] Error creating CustomTool of type "{}"'
+                '[_createCustomNode] Error creating CustomTool of type "{}"'
                 "".format(class_name)
             )
             node.delete()
@@ -223,7 +223,7 @@ def _registerToolPackage(package):
             )
             continue
 
-        NodegraphAPI.RegisterPythonNodeFactory(tool_class.name, _createCustomTool)
+        NodegraphAPI.RegisterPythonNodeFactory(tool_class.name, _createCustomNode)
         NodegraphAPI.AddNodeFlavor(tool_class.name, c.KATANA_FLAVOR_NAME)
         REGISTERED[tool_class.name] = tool_class
 
