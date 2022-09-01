@@ -378,11 +378,6 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
             isinstance(cls.author, str),
             "author=<{}> is not a str".format(cls.author),
         )
-        util.asserting(
-            isinstance(cls.maintainers, (list, tuple)),
-            "maintainers=<{}> is not a list or tuple".format(cls.maintainers),
-        )
-
         return
 
     @abstractmethod
