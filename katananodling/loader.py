@@ -9,7 +9,6 @@ from typing import Sequence
 from typing import Type
 
 from Katana import NodegraphAPI
-from Katana import Callbacks
 from Katana import Utils
 
 from . import c
@@ -154,38 +153,27 @@ def _createCustomNode(class_name):
         Instance of the node created in the Nodegraph.
     """
     custom_tool_class = REGISTERED[class_name]
+    node = None  # type: entities.BaseCustomNode
 
     Utils.UndoStack.DisableCapture()
 
     try:
 
-        try:
-            node = NodegraphAPI.CreateNode(
-                c.KATANA_TYPE_NAME
-            )  # type: entities.BaseCustomNode
-        except Exception:
-            logger.exception(
-                '[_createCustomNode] Error creating BaseCustomNode of type "{}"'.format(
-                    class_name
-                )
-            )
-            return
+        node = NodegraphAPI.CreateNode(c.KATANA_TYPE_NAME)
 
-        try:
+        node.__class__ = custom_tool_class
+        node.setType(class_name)
+        if not NodegraphAPI.NodegraphGlobals.IsLoading():
+            node.setName(class_name)
+            node.__build__()
 
-            node.__class__ = custom_tool_class
-            node.setType(class_name)
-            if not NodegraphAPI.NodegraphGlobals.IsLoading():
-                node.setName(class_name)
-                node.__build__()
-
-        except Exception:
-            logger.exception(
-                '[_createCustomNode] Error creating BaseCustomNode of type "{}"'
-                "".format(class_name)
-            )
+    except Exception as excp:
+        logger.exception(
+            '[_createCustomNode] Error creating BaseCustomNode of type "{}": {}'
+            "".format(class_name, excp)
+        )
+        if node:
             node.delete()
-            return
 
     finally:
         Utils.UndoStack.EnableCapture()
