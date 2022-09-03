@@ -42,12 +42,15 @@ class Env:
 
     _PREFIX = "KATANA_NODLING"
 
-    EXCLUDED_TOOLS = "{}_EXCLUDED_TOOLS".format(_PREFIX)
+    EXCLUDED_NODES = "{}_EXCLUDED_NODES".format(_PREFIX)
     """
-    Environment variable name that must specify a list of CustomNode name to NOT show in
-    the LayeredMenu. Separator is the system path separator (; or :):
+    List of CustomNodes **class name** that must be not be registered at all.
+    
+    Supports Unix shell-style wildcards thanks to the fnmatch python module.
+    
+    List separator is the system path separator (``;`` or ``:``):
 
-    ex: ``"attr_math;xform2P;point_width"``
+    ex: ``"Lxm*;SceneGenerator[12];PointWidth"``
     """
 
     UPGRADE_DISABLE = "{}_UPGRADE_DISABLE".format(_PREFIX)
@@ -68,7 +71,7 @@ class Env:
     def __all__(cls):
         # type: () -> List[str]
         return [
-            cls.EXCLUDED_TOOLS,
+            cls.EXCLUDED_NODES,
             cls.NODE_PARAM_DEBUG,
             cls.UPGRADE_DISABLE,
         ]

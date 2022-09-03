@@ -1,7 +1,9 @@
+import fnmatch
 import importlib
 import inspect
 import json
 import logging
+import traceback
 from types import ModuleType
 from typing import Dict
 from typing import Optional
@@ -232,23 +234,39 @@ def _getAvailableNodesInPackage(package):
     """
     import os  # defer import to get the latest version of os.environ
 
-    all_tools = _getAllNodesInPackage(package)
+    all_nodes = _getAllNodesInPackage(package)
 
-    excluded_tool_var = c.Env.get(c.Env.EXCLUDED_TOOLS)
-    if not excluded_tool_var:
-        return all_tools
+    excluded_nodes_var = c.Env.get(c.Env.EXCLUDED_NODES)
+    if not excluded_nodes_var:
+        return all_nodes
 
-    tools_to_exclude = excluded_tool_var.split(os.pathsep)
-    nexcluded = 0
-    for excluded_tool_name in tools_to_exclude:
-        if excluded_tool_name in all_tools:
-            del all_tools[excluded_tool_name]
-            nexcluded += 1
+    excluded_dict = dict()
+    excluded_keys = list()
+    # this is a list of Class names as fnmatch expressions !
+    class_names_to_exclude = excluded_nodes_var.split(os.pathsep)
+
+    for module_name, basecustomnode in all_nodes.items():
+
+        for namepattern in class_names_to_exclude:
+
+            if fnmatch.fnmatch(basecustomnode.__name__, namepattern):
+                excluded_keys.append(module_name)
+                excluded_dict[basecustomnode.__name__] = "excluded by: {}".format(
+                    namepattern
+                )
+                continue
+
+    # as we can't delete key in a dict we are iterating over :
+    for excluded in excluded_keys:
+        del all_nodes[excluded]
 
     logger.debug(
-        "[_getAvailableNodesInPackage] Finished. Excluded {} tools.".format(nexcluded)
+        "[_getAvailableNodesInPackage] Finished. Excluded {} nodes: {}".format(
+            len(excluded_dict),
+            json.dumps(excluded_dict, indent=4, default=str, sort_keys=True),
+        )
     )
-    return all_tools
+    return all_nodes
 
 
 def _getAllNodesInPackage(package):
