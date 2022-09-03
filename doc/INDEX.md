@@ -237,8 +237,7 @@ class MyToolName(BaseCustomNode):
 
 This take priority over the other method, if implemented.
 
-> **Info**
-> 
+> **Note**:
 > The path is opened using `webbrowser.open()` so you can actually also specify
 > a URL.
 
