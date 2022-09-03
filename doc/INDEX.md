@@ -129,6 +129,9 @@ class MyToolName(BaseCustomNode):
 
 # Good to know
 
-Be aware that you cannot open a scene with saved BaseCustomNode if at least the base
-BaseCustomNode class is not registered in Katana. But you can open a scene
-with BaseCustomNode subclass even if they are not registered.
+> Be aware that you cannot open a scene with saved BaseCustomNode if at least the base
+> BaseCustomNode class is not registered in Katana. But you can open a scene
+> with BaseCustomNode subclass even if they are not registered.
+
+> This repo has been extracted from [opscripting](https://github.com/MrLixm/opscripting).
+> To get all the commit history looks for commit on the `customtooling` directory there.
