@@ -230,12 +230,29 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
     port_in_name = "in"
     port_out_name = "out"
 
-    # MUST be overridden
+    # MUST be overridden :
+
     name = c.KATANA_TYPE_NAME  # type: str
+
     version = (0, 0, 0)  # type: Tuple[int,int,int]
+    """
+    Specified as (major, minor, patch) and following https://semver.org.
+    """
+
     color = None  # type: Optional[Tuple[float,float,float]]
+    """
+    Color used on the LayeredMenu but can also be used by the developer to color
+    the node itself.
+    """
+
     description = ""  # type: str
+
     author = ""  # type: str
+
+    documentation = None  # type: Optional[str]
+    """
+    Path to a documentation "entity" that can be a file path or an URL.
+    """
 
     def __init__(self):
 

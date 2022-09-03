@@ -116,9 +116,21 @@ OPEN_DOCUMENTATION_SCRIPT = """
 import os.path
 import webbrowser
 
-tool_path = parameter.getParent().getChild("{PATH_PARAM}").getValue(0)
-doc_path = os.path.splitext(tool_path)[0] + ".md"
+doc_path = None
 
-if os.path.exists(doc_path):
+# first try to get the path on the python class
+try:
+    doc_path = node.documentation
+expect:
+    pass
+
+if not doc_path:
+
+    tool_path = parameter.getParent().getChild("{PATH_PARAM}").getValue(0)
+    doc_path = os.path.splitext(tool_path)[0] + ".md"
+    if not os.path.exists(doc_path):
+        doc_path = None
+
+if doc_path:
     webbrowser.open(doc_path)
 """

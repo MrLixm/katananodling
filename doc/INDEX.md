@@ -167,6 +167,51 @@ upgrade for this version.
 Don't forget to call `self.about.__update__()` at the end so the version stored
 on the node itself is updated.
 
+## documentation
+
+It is possible to specify a documentation file that can be quickly opened by
+the artist from Katana using an automatized button on the tool's node.
+
+There is 2 way to specify the path to the documentation :
+
+### documentation : on python class
+
+Just override the `documentation` class variable :
+
+```python
+import os.path
+from katananodling.entities import BaseCustomNode
+
+# class can actually be named anything but let's keep it clean :)
+class MyToolName(BaseCustomNode):
+  
+  documentation = os.path.splitext(__file__)[0] + ".md"
+  # ...
+```
+
+This take priority over the other method, if implemented.
+
+> **Info**
+> 
+> The path is opened using `webbrowser.open()` so you can actually also specify
+> a URL.
+
+But the above example is actually already automatized :
+
+### documentation : on a side-car file
+
+The file just has to be named exactly like the tool's python module/package
+and have the `.md` extension.
+
+```
+myLibrary/
+    __init__.py
+    tree_generator.py
+    tree_generator.lua
+    tree_generator.md
+```
+
+
 # Layered menu
 
 The nodes are accessible via the usual `Tab` shortcut, but they will be 
