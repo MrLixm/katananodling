@@ -165,6 +165,23 @@ upgrade for this version.
 Don't forget to call `self.about.__update__()` at the end so the version stored
 on the node itself is updated.
 
+# Layered menu
+
+The nodes are accessible via the usual `Tab` shortcut, but they will be 
+drowned among the other nodes. To find the CustomNodes quicker, there is a 
+pre-made layeredMenu available that you can register :
+
+```python
+from Katana import LayeredMenuAPI
+import katananodling.menu
+
+layered_menu = katananodling.menu.getLayeredMenuForAllCustomNodes()
+LayeredMenuAPI.RegisterLayeredMenu(layered_menu, "katananodling")
+```
+
+There is a demo in [../dev/KatanaResources/UIPlugins](../dev/KatanaResources/UIPlugins).
+(you can add [../dev/KatanaResources](../dev/KatanaResources) to the `KATANA_RESOURCES` variable to test.)
+
 
 # Environment variables
 
