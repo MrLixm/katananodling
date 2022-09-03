@@ -8,6 +8,11 @@ Package for Foundry Katana software.
 A simple API to create and register a custom type of node called "CustomNode"
 , the mix between a macro and a SuperTool.
 
+Have a look at [./demolibrary/demo](./demolibrary/demo.py) to see how a new type
+of node can simply be created.
+
+![katana and code screenshot next to them](./doc/img/cover-demo.png)
+
 > **Note** 
 > This repo has been extracted from [opscripting](https://github.com/MrLixm/opscripting).
 > To get all the commit history looks for commit on the previously named

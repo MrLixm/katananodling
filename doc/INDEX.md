@@ -1,4 +1,4 @@
-# katananodling
+# Index
 
 [![root](https://img.shields.io/badge/back_to_root-536362?)](../README.md)
 [![INDEX](https://img.shields.io/badge/index-blue?labelColor=blue)](INDEX.md)
@@ -61,6 +61,8 @@ module per subclass.
 
 ## Register process in details.
 
+> Have a look at [../katananodling/loader.py](../katananodling/loader.py)
+
 Starting **by the end**, here is the registration process :
 
 - Each tool **class** will be registered in Katana using `NodegraphAPI.RegisterPythonNodeFactory` 
@@ -84,6 +86,20 @@ it has to be registered in the `PYTHONPATH` so it can be imported.
 - And initally we have the `registerNodesFor()` function that will take as argument
 a list of package name to import.
 
+## Registering result.
+
+The node can then be accessed via the usual `Tab` shortcut, and you will notice
+that they all have their own node type.
+
+You can quickly retrieve all the BaseCustomNodes nodes in the scene using :
+
+```python
+from Katana import NodegraphAPI
+import katananodling.c
+
+NodegraphAPI.GetFlavorNodes(katananodling.c.KATANA_FLAVOR_NAME)
+```
+
 
 # Creating BaseCustomNodes
 
@@ -100,7 +116,6 @@ As it most basic structure, a BaseCustomNode is :
 ```python
 from katananodling.entities import BaseCustomNode
 
-
 # class can actually be named anything but let's keep it clean :)
 class MyToolName(BaseCustomNode):
   name = "MyToolName"  # identifier used to register the tool in Katana !
@@ -111,11 +126,7 @@ class MyToolName(BaseCustomNode):
 
   def _build(self):
     p = self.user_param.createChildNumber("amount", 666)
-    hint = {
-      "slider": True,
-      "slidermax": 666,
-      "help": "whatever",
-    }
+    hint = {"slider": True, "slidermax": 666, "help": "whatever"}
     p.setHintString(repr(hint))
 
   def upgrade(self):
@@ -126,12 +137,75 @@ class MyToolName(BaseCustomNode):
 
 ```
 
+## methods
+
+### `BaseCustomNodes.__init__`
+
+Called when the node is created AND when loaded from an existing scene.
+
+You don't need to implement this by default.
+
+If you implement it, do not call the superclass init constructor. *( =no `super()`)*
+
+### `BaseCustomNodes._build`
+
+Called only when the node is created for the first time in the scene. NOT on
+previous scene loading. You can create nodes, edit parameters, add attributes, ...
+
+### `BaseCustomNodes.upgrade`
+
+Called when the node is loaded from a previous scene AND when the node is created
+for the first time.
+
+You don't need to implement this method unless you have published multiple versions
+of your node and one introduce some breaking change like a new parameter. In that
+case you can perform a check on the version of the node and then perform the required
+upgrade for this version.
+
+Don't forget to call `self.about.__update__()` at the end so the version stored
+on the node itself is updated.
+
+
+# Environment variables
+
+Check [../katananodling/c.py](../katananodling/c.py) for an in-depth look.
+
+The available environement variable are :
+
+## `KATANA_NODLING_EXCLUDED_NODES`:
+
+List of CustomNodes **class name** that must be not be registered at all.
+
+Supports Unix shell-style wildcards thanks to the fnmatch python module.
+
+List separator is the system path separator (`;` or `:`):
+
+> ex: `"Lxm*;SceneGenerator[12];PointWidth"`
+
+
+## `KATANA_NODLING_UPGRADE_DISABLE`: 
+
+Set to 1 (or actually to anythin non-empty)
+to disable the upgrading process when BaseCustomNode nodes are loaded
+from previous version.
+
+This can be useful when opening archived project or sending scene to the farm.
+
+
+## `KATANA_NODLING_NODE_PARAM_DEBUG`: 
+
+Set to 1 (or actually to anythin non-empty)
+to enable the "debug" mode for BaseCustomNode parameters in the nodegraph.
+Params that are usually hidden are made visible.
+
 
 # Good to know
 
-> Be aware that you cannot open a scene with saved BaseCustomNode if at least the base
-> BaseCustomNode class is not registered in Katana. But you can open a scene
-> with BaseCustomNode subclass even if they are not registered.
+> Be aware that you cannot open a scene with saved `BaseCustomNode` instance
+> if at least the base `BaseCustomNode` class is not registered in Katana.
+> But you can open a scene with `BaseCustomNode` subclasses even if they are not registered.
+> (so even if you unregister a node-library the scenes will still open)
 
 > This repo has been extracted from [opscripting](https://github.com/MrLixm/opscripting).
-> To get all the commit history looks for commit on the `customtooling` directory there.
+> To get all the commit history looks for commit on the previously named
+> `customtooling` directory there.
