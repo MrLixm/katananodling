@@ -1,4 +1,5 @@
 from Katana import NodegraphAPI
+from Katana import DrawingModule
 
 from katananodling.entities import BaseCustomNode
 
@@ -14,8 +15,8 @@ class DemoNode(BaseCustomNode):
     def _build(self):
 
         prunenode = NodegraphAPI.CreateNode("Prune", self)
-        p = prunenode.getParameter("CEL")
-        p.setExpression("^/user.CEL")
+        p = prunenode.getParameter("cel")
+        p.setExpression("=^/user.CEL")
         self.wireInsertNodes([prunenode])
 
         userparam = self.user_param
@@ -27,5 +28,6 @@ class DemoNode(BaseCustomNode):
         hint = {"slider": True, "slidermax": 2.0}
         p.setHintString(repr(hint))
 
+        DrawingModule.SetCustomNodeColor(self, *self.color)
         self.moveAboutParamToBottom()
         return
