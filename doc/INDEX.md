@@ -39,7 +39,7 @@ Each of this library will be imported and iterated directly to find the
 BaseCustomNode subclasses. To declare a subclass to be registered, you just
 need to import it in the `__init__` of your package :
 
-```toml
+```ini
 parentDir/  # <- registered in PYTHONPATH
     libProject/  # <- the library
         __init__.py
