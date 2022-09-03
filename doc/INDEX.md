@@ -2,6 +2,7 @@
 
 [![root](https://img.shields.io/badge/back_to_root-536362?)](../README.md)
 [![INDEX](https://img.shields.io/badge/index-blue?labelColor=blue)](INDEX.md)
+[![creating-libraries](https://img.shields.io/badge/creating--libraries-4f4f4f)](creating-libraries.md)
 
 Documentation for the `katananodling` python package.
 
@@ -19,8 +20,10 @@ BaseCustomNode subclasses that can be registered.
 This is achieved via the `registerNodesFor` function of the 
 [../katananodling/loader.py](../katananodling/loader.py) module.
 
-This function will expect a list of package name as argument. Those package
+This function will expect a list of python package names as argument. Those package
 must be already registered in the PYTHONPATH, so they can be imported.
+
+We will call those packages "node libraries".
 
 ```python
 from katananodling.loader import registerNodesFor
@@ -30,15 +33,19 @@ locations_to_register = ["libStudio", "libProject", "opscriptlibrary"]
 registerNodesFor(locations_to_register)
 ```
 
-Each of this package will be imported and iterated directly to find the 
+## Libraries
+
+Each of this library will be imported and iterated directly to find the 
 BaseCustomNode subclasses. To declare a subclass to be registered, you just
 need to import it in the `__init__` of your package :
 
 ```toml
 parentDir/  # <- registered in PYTHONPATH
-    libProject/
+    libProject/  # <- the library
         __init__.py
             """
+            import sys  # <- will be ignored
+            
             from .myTool import MyTool
             """
         myTool.py
@@ -55,8 +62,10 @@ parentDir/  # <- registered in PYTHONPATH
             """
 ```
 
-How you organize the package is up to you but it is recommended to create one
-module per subclass.
+So the library only care about what is defined in the `__init__.py` of the package.
+How you organize it is up to you, but it is recommended to create one
+module per subclass. (the `open_documentation` parameter on nodes is expecting
+this structure)
 
 
 ## Register process in details.
@@ -110,34 +119,71 @@ it can also be a subclass of a subclass of BaseCustomNode and so on ...
 
 As it most basic structure, a BaseCustomNode is :
 
-- python :
-  - some class variable for information to keep track of it
-  - a `_build()` method to do whatever you want on the node.
-  - an optional `upgrade()` method to handle porting of older version to newer ones.
+- some class variable for information to keep track of it
+- a `_build()` method to do whatever you want on the node.
+- an optional `upgrade()` method to handle porting of older version to newer ones.
 
 ```python
 from katananodling.entities import BaseCustomNode
 
-# class can actually be named anything but let's keep it clean :)
+# class can actually be named anything but its name is used as identifier
+# so don't change it later.
 class MyToolName(BaseCustomNode):
-  name = "MyToolName"  # identifier used to register the tool in Katana !
-  version = (0, 1, 0)
-  color = None
-  description = "What the tool does in a few words."
-  author = "<FirstName Name email@provider.com>"
-
-  def _build(self):
-    p = self.user_param.createChildNumber("amount", 666)
-    hint = {"slider": True, "slidermax": 666, "help": "whatever"}
-    p.setHintString(repr(hint))
-
-  def upgrade(self):
-    if self.version == self.about.version:
-      return
-    # now do whatever you need to upgrade
-    self.about.__update__()
+  
+    name = "MyToolName"  # identifier used to register the tool in Katana !
+    version = (0, 1, 0)
+    color = None
+    description = "What the tool does in a few words."
+    author = "<FirstName Name email@provider.com>"
+  
+    def _build(self):
+        p = self.user_param.createChildNumber("amount", 666)
+        hint = {"slider": True, "slidermax": 666, "help": "whatever"}
+        p.setHintString(repr(hint))
+  
+    def upgrade(self):
+        if self.version == self.about.version:
+          return
+        # now do whatever you need to upgrade
+        self.about.__update__()
 
 ```
+
+It's up to you to name the class but here is some hints :
+
+- Ends the name with `Node` ex: `TreeGeneratorNode`
+- Once the node has been released in the pipeline, do not change it. The class
+name is used  by the `KATANA_NODLING_EXCLUDED_NODES` env variable to filter out
+node you don't want to register.
+
+## class variables
+
+### BaseCustomNode.name
+
+Unique name used to register the node in Katana.
+
+Changing it later will break references to nodes in previous scenes.
+
+### BaseCustomNode.version
+
+Specified as (major, minor, patch) and following https://semver.org.
+
+### BaseCustomNode.color
+
+Color used on the LayeredMenu but can also be used by the developer to color
+the node itself.
+
+### BaseCustomNode.description
+
+Short text describing what the node does.
+
+### BaseCustomNode.author
+
+Name of the author of the node with a potential email adress like `<FirstName Name email@provider>`
+
+### BaseCustomNode.documentation
+
+See [documentation section](#documentation)
 
 ## methods
 
@@ -185,8 +231,8 @@ from katananodling.entities import BaseCustomNode
 # class can actually be named anything but let's keep it clean :)
 class MyToolName(BaseCustomNode):
   
-  documentation = os.path.splitext(__file__)[0] + ".md"
-  # ...
+    documentation = os.path.splitext(__file__)[0] + ".md"
+    # ...
 ```
 
 This take priority over the other method, if implemented.
