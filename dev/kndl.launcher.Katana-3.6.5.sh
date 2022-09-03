@@ -16,5 +16,6 @@ export KATANA_USER_RESOURCE_DIRECTORY=".\dev\_prefs"
 export KATANA_RESOURCES="$KATANA_RESOURCES;.\dev\KatanaResources"
 
 export PYTHONPATH="$PYTHONPATH;..\katananodling"
+export PYTHONPATH="$PYTHONPATH;..\typing"
 
 "$KATANA_HOME\bin\katanaBin.exe"
