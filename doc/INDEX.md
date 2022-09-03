@@ -103,6 +103,8 @@ NodegraphAPI.GetFlavorNodes(katananodling.c.KATANA_FLAVOR_NAME)
 
 # Creating BaseCustomNodes
 
+> You can find a working example in [../demolibrary](../demolibrary)
+
 A custom tool will always be a subclass of `entities.BaseCustomNode`, but
 it can also be a subclass of a subclass of BaseCustomNode and so on ...
 
@@ -187,7 +189,7 @@ There is a demo in [../dev/KatanaResources/UIPlugins](../dev/KatanaResources/UIP
 
 Check [../katananodling/c.py](../katananodling/c.py) for an in-depth look.
 
-The available environement variable are :
+The available environment variable are :
 
 ## `KATANA_NODLING_EXCLUDED_NODES`:
 
