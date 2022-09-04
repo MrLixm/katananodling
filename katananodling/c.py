@@ -121,7 +121,7 @@ doc_path = None
 # first try to get the path on the python class
 try:
     doc_path = node.documentation
-expect:
+except:
     pass
 
 if not doc_path:
