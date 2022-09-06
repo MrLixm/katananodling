@@ -220,8 +220,6 @@ def _registerNodePackage(package):
         NodegraphAPI.RegisterPythonNodeFactory(tool_class.name, _createCustomNode)
         NodegraphAPI.AddNodeFlavor(tool_class.name, c.KATANA_FLAVOR_NAME)
         tool_class._registered = True
-        # not sure if there could be case where len(__path__) > 1
-        tool_class.library_path = package.__path__[0]
         REGISTERED[tool_class.name] = tool_class
 
         logger.debug(

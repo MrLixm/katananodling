@@ -2,6 +2,7 @@ import ast
 import json
 import logging
 import re
+import sys
 import traceback
 from abc import abstractmethod
 import inspect
@@ -254,14 +255,6 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
     Path to a documentation "entity" that can be a file path or an URL.
     """
 
-    library_path = None  # type: str
-    """
-    Absolute path to the top parent directory that act as a library. (might NOT be the 
-    parent directory of this class' module but the one further level above.)
-
-    **Set at registering time (in Katana).**
-    """
-
     _registered = False  # type: bool
     """
     True if the class has been registered in Katana.
@@ -411,6 +404,24 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
             "author=<{}> is not a str".format(cls.author),
         )
         return
+
+    @classmethod
+    def getLibraryPath(cls):
+        # type: () -> str
+        """
+        Absolute path to the top parent directory that act as a library.
+        (might NOT be the parent directory of this class' module but the one further
+        level above.)
+        """
+        library_name = cls.__module__.split(".")[0]
+        library_module = sys.modules.get(library_name)
+        if not library_module:
+            logger.warning(
+                "[{}][getLibraryPath] Cannot retrieve the module for the parent "
+                "library. <{}> not in sys.modules"
+                "".format(cls.__name__, library_name)
+            )
+        return library_module.__path__[0]
 
     @abstractmethod
     def _build(self):
