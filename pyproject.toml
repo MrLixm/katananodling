@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "katananodling"
-version = "1.0.1"  # version has to be kept in sync with ./katananodling/c.py
+version = "1.1.0"  # version has to be kept in sync with ./katananodling/c.py
 description = "API to create and register custom nodes in Katana."
 authors = ["Liam Collod <lcollod@gmail.com>"]
 keywords = ["vfx", "nodegraph", "custom"]
