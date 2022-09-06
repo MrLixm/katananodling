@@ -199,15 +199,29 @@ def _registerNodePackage(package):
     for tool_module_name, tool_class in customnodes_dict.items():
 
         if tool_class.name in REGISTERED:
-            logger.warning(
-                "[_registerNodePackage] tool from module <{}> from package {} is "
-                "already registered as <{}>."
-                "".format(tool_module_name, package, tool_class.name)
+            logger.error(
+                "[_registerNodePackage] alreadyRegisteredError: node <{0}>"
+                "is already registered in the REGISTERED global.\n"
+                "(node=<{0}>, package=<{1}>, module=<{2}>)"
+                "".format(tool_class.name, tool_module_name, package)
+            )
+            continue
+
+        if tool_class._registered:
+            logger.error(
+                "[_registerNodePackage] alreadyRegisteredError: the node has its class"
+                "variable `_registered` set to True while it is not in `REGISTERED`"
+                "which mean it has been registered from somewhere else.\n"
+                "(node=<{}>, package=<{}>)"
+                "".format(tool_module_name, package)
             )
             continue
 
         NodegraphAPI.RegisterPythonNodeFactory(tool_class.name, _createCustomNode)
         NodegraphAPI.AddNodeFlavor(tool_class.name, c.KATANA_FLAVOR_NAME)
+        tool_class._registered = True
+        # not sure if there could be case where len(__path__) > 1
+        tool_class.library_path = package.__path__[0]
         REGISTERED[tool_class.name] = tool_class
 
         logger.debug(
@@ -217,7 +231,7 @@ def _registerNodePackage(package):
         continue
 
     logger.debug(
-        "[_registerNodePackage] Finished registering package {}, {} tools found."
+        "[_registerNodePackage] Finished registering package {}, {} node found."
         "".format(package, len(customnodes_dict))
     )
     return customnodes_dict

@@ -254,6 +254,21 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
     Path to a documentation "entity" that can be a file path or an URL.
     """
 
+    library_path = None  # type: str
+    """
+    Absolute path to the top parent directory that act as a library. (might NOT be the 
+    parent directory of this class' module but the one further level above.)
+
+    **Set at registering time (in Katana).**
+    """
+
+    _registered = False  # type: bool
+    """
+    True if the class has been registered in Katana.
+
+    **Set at registering time (in Katana).**
+    """
+
     def __init__(self):
 
         self.about = AboutGroupParam(self)  # type: AboutGroupParam
