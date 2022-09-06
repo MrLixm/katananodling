@@ -1,4 +1,5 @@
 import logging
+import sys
 from abc import abstractmethod
 from typing import Optional
 
@@ -18,13 +19,28 @@ class OpScriptCustomNode(BaseCustomNode):
     declared in the ``_build()`` method that must be overriden.
     """
 
-    luamodule = NotImplemented
-    """
-    Every OpScript must live in a .lua registered in the LUA_PATH.
-    This means the OpScript.script will only import it using ``require()``
+    @classmethod
+    def getLuaModuleName(cls):
+        # type: () -> Optional[str]
+        """
+        This return the "import path" of the lua module for this node. To be used by
+        the lua ``require()`` function.
 
-    This is not used by default and its up to the developer subclassing this to use it.
-    """
+        It is free to the user to use this function or manually specify the module name
+        in the OpScript.
+
+        ex: "demolibrary.packageDemo.init" for a "package"
+        ex: "demolibrary.demo" for a module
+        """
+        module_name = cls.__module__
+        module = sys.modules[module_name]
+        # if module has __path__ attribute = this is a package.
+        # package means we use "init" files,
+        if hasattr(module, "__path__"):
+            # and in lua init module doesn't have the underscores
+            module_name = module_name + ".init"
+
+        return module_name
 
     def _buildDefaultStructure(self):
         super(OpScriptCustomNode, self)._buildDefaultStructure()
