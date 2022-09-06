@@ -63,9 +63,42 @@ parentDir/  # <- registered in PYTHONPATH
 ```
 
 So the library only care about what is defined in the `__init__.py` of the package.
-How you organize it is up to you, but it is recommended to create one
-module per subclass. (the `open_documentation` parameter on nodes is expecting
-this structure)
+(not 100% true as some "utility" functions expect a certain hierarchy)
+
+How you organize it is up to you, but consider the following conventions :
+
+### Libraries Structure suggestion
+
+#### Modules
+
+For small libraries with few nodes
+
+```ini
+library/
+    __init__.py
+    nodeAlpha.py
+    nodeBeta.py
+    nodeBeta.md
+```
+
+#### Packages
+
+(Recommended) For medium to big libraries.
+
+```ini
+
+library/
+    __init__.py
+    nodeAlpha/
+        __init__.py
+    nodeBeta/
+        __init__.py
+        __init__.md
+        img.jpg
+        # ...
+```
+
+Have a look at the [demolibrary](../demolibrary) to see some examples.
 
 
 ## Register process in details.
@@ -128,7 +161,7 @@ from katananodling.entities import BaseCustomNode
 
 # class can actually be named anything but its name is used as identifier
 # so don't change it later.
-class MyToolName(BaseCustomNode):
+class MyToolNameNode(BaseCustomNode):
   
     name = "MyToolName"  # identifier used to register the tool in Katana !
     version = (0, 1, 0)
@@ -255,6 +288,27 @@ myLibrary/
     tree_generator.lua
     tree_generator.md
 ```
+
+# BaseCustomNode subclasses to subclass
+
+Yeah that title is not very clear : In some cases you might want to create 
+multiple custom nodes that share the same features. To avoid duplicated code
+it can be smart to create a first subclass of `BaseCustomNode` that is implemented
+here, in this package, and then subclassed by the custom nodes in the libraries.
+
+There is currently one example of this which is the `OpScriptCustomNode` class
+in [entities/opscript](../katananodling/entities/opscript.py).
+
+## OpScriptCustomNode
+
+Convenient class to create a custom node whose main feature is based around
+an OpScript. It creates a default OpScript node that can then be configured as
+wished.
+
+It's `getLuaModuleName` function assume that the OpScript lua script used is
+an actual file living next to the python module of the subclass, and not code
+directly stored in the OpScript node. This is the principle of the 
+[opscripting](https://github.com/MrLixm/opscripting) package.
 
 
 # Layered menu
