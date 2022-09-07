@@ -35,6 +35,9 @@ registerNodesFor(locations_to_register)
 
 ## Libraries
 
+> A library is a python package that defined a bunch of BaseCustomNode 
+> subclasses inside.
+
 Each of this library will be imported and iterated directly to find the 
 BaseCustomNode subclasses. To declare a subclass to be registered, you just
 need to import it in the `__init__` of your package :
@@ -71,7 +74,7 @@ How you organize it is up to you, but consider the following conventions :
 
 #### Modules
 
-For small libraries with few nodes
+For small libraries with few nodes, one module per node subclass.
 
 ```ini
 library/
@@ -83,7 +86,7 @@ library/
 
 #### Packages
 
-(Recommended) For medium to big libraries.
+(Recommended) For medium to big libraries. One package per node subclass.
 
 ```ini
 
@@ -128,7 +131,7 @@ it has to be registered in the `PYTHONPATH` so it can be imported.
 - And initally we have the `registerNodesFor()` function that will take as argument
 a list of package name to import.
 
-## Registering result.
+## Registering's result.
 
 The node can then be accessed via the usual `Tab` shortcut, and you will notice
 that they all have their own node type.
@@ -191,30 +194,45 @@ node you don't want to register.
 
 ## class variables
 
-### BaseCustomNode.name
+These are the public variables you have to set on each new subclass.
+
+### ![str](https://img.shields.io/badge/str-4f4f4f) BaseCustomNode.name
 
 Unique name used to register the node in Katana.
 
 Changing it later will break references to nodes in previous scenes.
 
-### BaseCustomNode.version
+### ![tuple[int, int, int]](https://img.shields.io/badge/tuple[int,_int,_int]-4f4f4f) BaseCustomNode.version
 
 Specified as (major, minor, patch) and following https://semver.org.
 
-### BaseCustomNode.color
+### ![tuple[float, float, float] or None](https://img.shields.io/badge/tuple[float,float,float]_or_None-4f4f4f) BaseCustomNode.color
 
 Color used on the LayeredMenu but can also be used by the developer to color
 the node itself.
 
-### BaseCustomNode.description
+Tips: you can used the `Colors` class attribute to access pre-defined colors
+(editable in the `c.py` module)
+
+```python
+from katananodling.entities import BaseCustomNode
+
+class MyNode(BaseCustomNode):
+    color = BaseCustomNode.Colors.purple
+```
+
+Set to None to use the default color.
+
+
+### ![str](https://img.shields.io/badge/str-4f4f4f) BaseCustomNode.description
 
 Short text describing what the node does.
 
-### BaseCustomNode.author
+### ![str](https://img.shields.io/badge/str-4f4f4f) BaseCustomNode.author
 
 Name of the author of the node with a potential email adress like `<FirstName Name email@provider>`
 
-### BaseCustomNode.documentation
+### ![str](https://img.shields.io/badge/str-4f4f4f) BaseCustomNode.documentation
 
 See [documentation section](#documentation)
 
@@ -352,7 +370,7 @@ Set to 1 (or actually to anythin non-empty)
 to disable the upgrading process when BaseCustomNode nodes are loaded
 from previous version.
 
-This can be useful when opening archived project or sending scene to the farm.
+This can be useful when opening archived project or sending scene to a render farm.
 
 
 ## `KATANA_NODLING_NODE_PARAM_DEBUG`: 
