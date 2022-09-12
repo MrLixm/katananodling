@@ -101,6 +101,9 @@ library/
         # ...
 ```
 
+We use the `__init__.py` to directly declare the node and avoid the need to create
+a new module.
+
 Have a look at the [demolibrary](../demolibrary) to see some examples.
 
 
@@ -261,6 +264,18 @@ of your node and one introduce some breaking change like a new parameter. In tha
 case you can perform a check on the version of the node and then perform the required
 upgrade for this version.
 
+The version to compare are the version stored in the class attribute, and
+the version stored on the node parameters :
+
+```python
+def upgrade(self):
+    if self.version == self.about.version:
+      return
+    
+    # reaching here means we have a version difference
+```
+
+
 Don't forget to call `self.about.__update__()` at the end so the version stored
 on the node itself is updated.
 
@@ -317,6 +332,8 @@ here, in this package, and then subclassed by the custom nodes in the libraries.
 There is currently one example of this which is the `OpScriptCustomNode` class
 in [entities/opscript](../katananodling/entities/opscript.py).
 
+It is recommended to create on new module in `entities/` per new subclass.
+
 ## OpScriptCustomNode
 
 Convenient class to create a custom node whose main feature is based around
@@ -345,6 +362,9 @@ LayeredMenuAPI.RegisterLayeredMenu(layered_menu, "katananodling")
 
 There is a demo in [../dev/KatanaResources/UIPlugins](../dev/KatanaResources/UIPlugins).
 (you can add [../dev/KatanaResources](../dev/KatanaResources) to the `KATANA_RESOURCES` variable to test.)
+
+The shortcut to open this layeredMenu in katana is `O` by default but can be
+changed in `c.py`.
 
 
 # Environment variables
@@ -390,3 +410,9 @@ Params that are usually hidden are made visible.
 > This repo has been extracted from [opscripting](https://github.com/MrLixm/opscripting).
 > To get all the commit history looks for commit on the previously named
 > `customtooling` directory there.
+
+> Some utility function make use of `sys.modules` to work. So be aware that 
+> monkey patching or other weird path manipulation may affect them.
+> 
+> Those are `entities.opscript.OpScriptCustomNode.getLuaModuleName` and
+> `entities.opscript.BaseCustomNode.getLibraryPath`
