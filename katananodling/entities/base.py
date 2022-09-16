@@ -497,6 +497,10 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
                 continue
 
             indownport.connect(previousOutPort)
+            NodegraphAPI.SetNodePosition(
+                self._node_dot_down, (previousPos[0], previousPos[1] - vertical_offset)
+            )
+
         except:
             traceback.print_exc()
             logger.exception(
