@@ -6,6 +6,8 @@
 
 Documentation for the `katananodling` python package.
 
+# What
+
 This package allows to register a custom type of node called BaseCustomNode that
 allow to quickly create new node to extend Katana. It is similar to SuperTools
 with the difference it removes the need of going through Qt to build the interface.
@@ -15,7 +17,21 @@ to register to a function called at startup.
 Those locations are a usual python package whose namespace list all the
 BaseCustomNode subclasses that can be registered.
 
+As for SuperTools, CustomNode are version tracked and can be upgraded which
+made maintenance much easier. They work well in a version-controlled pipeline.
+
+Their biggest issue is that they are defined in Python. While Macro made easy
+for non-technical artist to create tools, CustomNodes will prevent this and will
+imply some basic python knowledge to iterate tools.
+
+A solution to this is currently being investigated in issue #1, where we would
+let users create their node in Katana as usual and just have them run a command
+to convert them to python.
+
+
 # Registering BaseCustomNodes
+
+Let's start by the end and see what is the entry point in Katana :
 
 This is achieved via the `registerNodesFor` function of the 
 [../katananodling/loader.py](../katananodling/loader.py) module.
@@ -271,8 +287,15 @@ the version stored on the node parameters :
 def upgrade(self):
     if self.version == self.about.version:
       return
-    
     # reaching here means we have a version difference
+    
+    version = self.about.version  # just to get less characters to type :^)
+    
+    if version.major < 2 and version.minor < 2:
+        # whatever
+        pass
+        
+    self.about.__update__()
 ```
 
 
