@@ -65,9 +65,9 @@ def registerNodesFor(tools_packages_list):
         try:
             package = importlib.import_module(package_id)  # type: ModuleType
         except Exception as excp:
-            logger.exception(
-                "[registerNodesFor] Cannot import package <{}>: {}"
-                "".format(package_id, excp)
+            logger.error(
+                "[registerNodesFor] Cannot import package <{}>: {}\n{}"
+                "".format(package_id, excp, traceback.format_exc())
             )
             continue
 
@@ -126,19 +126,17 @@ def upgradeOnNodeCreateEvent(*args, **kwargs):
         node.__upgradeapi__()
         node.upgrade()
     except Exception as excp:
-        logger.exception(
-            "[upgradeOnNodeCreateEvent] Cannot upgrade BaseCustomNode node {}: {}"
-            "".format(node, excp),
-            exc_info=excp,
+        logger.error(
+            "[upgradeOnNodeCreateEvent] Cannot upgrade BaseCustomNode node {}: {}\n{}"
+            "".format(node, excp, traceback.format_exc()),
         )
 
     try:
         node.__toggleDebugMode__(True if c.Env.get(c.Env.NODE_PARAM_DEBUG) else False)
     except Exception as excp:
-        logger.exception(
+        logger.error(
             "[upgradeOnNodeCreateEvent] Error while calling __toggleDebugMode__ "
-            "on node {}: {}".format(node, excp),
-            exc_info=excp,
+            "on node {}: {}\n{}".format(node, excp, traceback.format_exc()),
         )
 
     return
@@ -170,9 +168,9 @@ def _createCustomNode(class_name):
             node.__build__()
 
     except Exception as excp:
-        logger.exception(
-            '[_createCustomNode] Error creating BaseCustomNode of type "{}": {}'
-            "".format(class_name, excp)
+        logger.error(
+            '[_createCustomNode] Error creating BaseCustomNode of type "{}": {}\n{}'
+            "".format(class_name, excp, traceback.format_exc())
         )
         if node:
             node.delete()
@@ -310,7 +308,7 @@ def _getAllNodesInPackage(package):
         try:
             objectData._check()
         except AssertionError as excp:
-            logger.exception(
+            logger.error(
                 "[_getAllNodesInPackage] InvalidNodeClass: class <{}> for package {}:\n"
                 "   {}".format(objectData, package, excp)
             )

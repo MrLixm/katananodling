@@ -278,9 +278,9 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
             self._buildDefaultStructure()
             self._build()
         except Exception as excp:
-            logger.exception(
-                "[{}][__build__] {}".format(self.__class__.__name__, excp),
-                exc_info=excp,
+            logger.error(
+                "[{}][__build__] {}\n{}"
+                "".format(self.__class__.__name__, excp, traceback.format_exc()),
             )
         return
 
@@ -502,10 +502,9 @@ class BaseCustomNode(NodegraphAPI.PythonGroupNode):
             )
 
         except:
-            traceback.print_exc()
-            logger.exception(
-                "[{}][wireInsertNodes] Error while trying to connect {}"
-                "".format(self.__class__.__name__, node_list)
+            logger.error(
+                "[{}][wireInsertNodes] Error while trying to connect {}\n{}"
+                "".format(self.__class__.__name__, node_list, traceback.format_exc())
             )
             raise
         return
