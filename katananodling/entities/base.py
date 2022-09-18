@@ -31,8 +31,8 @@ class AboutGroupParam:
     node version is upgraded using the ``upgrade()`` method. (where you should call
     the ``__update__()`` method.)
 
-    The parameter names on this should not be modified as there is no upgrade method
-    that take care of updating them if an older "version" of them is encountered.
+    If the parameter structure is modified or anything that impact the node in katana,
+    you would need to implement the changes in :func:`~AboutGroupParam.__upgradeapi__`
     """
 
     class ParamNames:
