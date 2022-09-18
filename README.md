@@ -16,6 +16,8 @@ of node can simply be created.
 
 ![katana and code screenshot next to them](./doc/img/cover-demo.png)
 
+![diagram katanaodling overall logic](./doc/img/diagram-overall.png)
+
 # Documentation
 
 > [![documentation](https://img.shields.io/badge/visit_documentation-blue)](doc/INDEX.md)

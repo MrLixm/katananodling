@@ -27,6 +27,8 @@ A solution to this is currently being investigated in issue https://github.com/M
 let users create their node in Katana as usual and just have them run a command
 to convert them to python.
 
+![diagram katanaodling overall logic](./img/diagram-overall.png)
+
 # Installation
 
 `katananodling` is a traditional python package and just need its parent directory
