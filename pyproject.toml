@@ -10,10 +10,14 @@ keywords = ["vfx", "nodegraph", "custom"]
 
 [tool.poetry.dependencies]
 python = ">=2.7"
+typing = [
+    {version = "*", python = "<3.5"}
+]
 
 [tool.poetry.group.dev.dependencies]
-python = ">=3.6.2"
-black = "*"
+black = [
+    {version = "*", python = "^3.6"}
+]
 
 [tool.pydocstyle]
 convention = "google"

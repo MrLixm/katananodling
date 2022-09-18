@@ -2,7 +2,6 @@
 
 [![root](https://img.shields.io/badge/back_to_root-536362?)](../README.md)
 [![INDEX](https://img.shields.io/badge/index-blue?labelColor=blue)](INDEX.md)
-[![creating-libraries](https://img.shields.io/badge/creating--libraries-4f4f4f)](creating-libraries.md)
 
 Documentation for the `katananodling` python package.
 
@@ -24,10 +23,41 @@ Their biggest issue is that they are defined in Python. While Macro made easy
 for non-technical artist to create tools, CustomNodes will prevent this and will
 imply some basic python knowledge to iterate tools.
 
-A solution to this is currently being investigated in issue #1, where we would
+A solution to this is currently being investigated in issue https://github.com/MrLixm/katananodling/issues/1, where we would
 let users create their node in Katana as usual and just have them run a command
 to convert them to python.
 
+# Installation
+
+`katananodling` is a traditional python package and just need its parent directory
+to be added to `PYTHONPATH`
+
+```ini
+/z/stuff/
+    katananodling/
+        README.md
+        katananodling/
+        doc/
+        ...
+```
+
+```shell
+export PYTHONPATH="$PYTHONPATH;/z/stuff/katananodling"
+```
+
+It has a single dependencies which is the official python `typing` module.
+It is only needed if your Katana version is on a Python version <3.5.
+
+To install it you can 
+```shell
+cd /z/stuff
+mkdir typing
+python2 -m pip install typing --target=typing/
+```
+and then just add it to `PYTHONPATH`
+```shell
+export PYTHONPATH="$PYTHONPATH;/z/stuff/typing"
+```
 
 # Registering BaseCustomNodes
 
